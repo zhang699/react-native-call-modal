@@ -7,7 +7,8 @@ import {
   TextInput,
   Dimensions,
   TouchableWithoutFeedback,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from "react-native";
 
 const MODAL_WIDTH = Dimensions.get("window").width / 2;
