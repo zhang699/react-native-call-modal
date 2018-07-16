@@ -8,8 +8,9 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   StyleSheet,
-  TouchableOpacity
-} from "react-native";
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
 const MODAL_WIDTH = Dimensions.get("window").width / 2;
 const MODAL_HEIGHT = Dimensions.get("window").height / 2;
@@ -326,20 +327,16 @@ class CheckBoxPrompt extends Component {
   render() {
     const Item = defaultItemRender;
     return (
-      <View>
-        {_.map(this.state.selectionList, ({ key, value, selected }, index) => (
-          <Item
-            key={key}
-            last={
-              this.props.autoSubmit &&
-              index === this.state.selectionList.length - 1
-            }
-            onPress={() => {
-              let newSelectionList;
-              if (this.props.multiple) {
-                newSelectionList = _.map(
-                  this.state.selectionList,
-                  selection => {
+      <ScrollView contentContainerStyle={{maxHeight: MODAL_HEIGHT}}>
+        {
+          _.map(this.state.selectionList, ({ key, value, selected }, index) => (
+            <Item
+              key={key}
+              last={this.props.autoSubmit && index === this.state.selectionList.length - 1}
+              onPress={() => {
+                let newSelectionList;
+                if (this.props.multiple) {
+                  newSelectionList = _.map(this.state.selectionList, (selection) => {
                     let result = Object.assign({}, selection);
                     if (selection.key === key) {
                       Object.assign(result, {
@@ -367,18 +364,18 @@ class CheckBoxPrompt extends Component {
                       });
                     }
                     return result;
-                  }
-                );
-              }
-              this.setState({
-                selectionList: newSelectionList
-              });
-              this.props.onChangeValue(newSelectionList);
-            }}
-            text={`${selected === true ? "V " : ""}${value}`}
-          />
-        ))}
-      </View>
+                  });
+                }
+                this.setState({
+                  selectionList: newSelectionList,
+                });
+                this.props.onChangeValue(newSelectionList);
+              }}
+              text={`${(selected === true)?'V ': ''}${value}`}
+            />
+          ))
+        }
+      </ScrollView>
     );
   }
 }
